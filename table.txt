@@ -1,0 +1,31 @@
+CREATE TABLE Users (
+    UserID          NUMBER(10) PRIMARY KEY,       -- Primary Key
+    Username        VARCHAR(50) NOT NULL UNIQUE,  -- Non-null and unique identifier
+    Email           VARCHAR(100) NOT NULL UNIQUE, -- Non-null and unique email
+    RegisteredAt    DATE DEFAULT SYSDATE          -- Default value to system date
+);
+
+
+CREATE TABLE Products (
+    ProductID   NUMBER(10) PRIMARY KEY,     -- Primary Key
+    Title       VARCHAR(255) NOT NULL       -- Title must not be null
+);
+
+
+CREATE TABLE Comments (
+    CommentID       NUMBER(10) PRIMARY KEY,     -- Primary Key
+    CommentText     VARCHAR(1000) NOT NULL,     -- Comment content must be non-null
+    CommentedAt     DATE DEFAULT SYSDATE,       -- Date of comment (default to system date)
+    IsVisible       VARCHAR(5) DEFAULT 'TRUE',  -- Default status is visible (TRUE)
+    
+    ProductID       NUMBER(10) NOT NULL,        -- Links to the product being commented on
+    UserID          NUMBER(10) NOT NULL,        -- Links to the user who wrote the comment
+    
+    -- Foreign Key 1: Links to the Products table
+    CONSTRAINT FK_Comments_Products FOREIGN KEY (ProductID) 
+        REFERENCES Products(ProductID),
+    
+    -- Foreign Key 2: Links to the Users table
+    CONSTRAINT FK_Comments_Users FOREIGN KEY (UserID) 
+        REFERENCES Users(UserID)
+);
